@@ -119,6 +119,12 @@ namespace pal_vision_util
     Image(IplImage *img);
 
     /**
+     * @brief Image constructor from a cv::Mat object. The ownership is shared but no memory will be released in the destructor.
+     * @param mat
+     */
+    Image(const cv::Mat& mat);
+
+    /**
           * @brief destructor. If the ownership of an IplImage has been taken it is released.
           */
     ~Image();
@@ -168,7 +174,9 @@ namespace pal_vision_util
 
   private:
 
+    IplImage _iplFromMat;
     IplImage *_img;
+    bool _releaseOnDestroyer;
   };
 
   /**

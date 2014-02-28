@@ -1,7 +1,7 @@
 <launch>
     
     <group ns="/template_segmentation">
-        <rosparam command="load" file="$(find pal_vision_segmentation)/default_tabletop_template.yaml" />
+        <rosparam command="load" file="$(find pal_vision_segmentation)/config/default_tabletop_template.yaml" />
     </group>
 
     <node pkg="pal_vision_segmentation" type="template_segmentation" name="template_segmentation" args="$(find pal_vision_segmentation)/etc/pringles1.png">

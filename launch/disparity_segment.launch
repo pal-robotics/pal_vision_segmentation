@@ -1,7 +1,7 @@
 <launch>
     
     <group ns="/disparity_segmentation">
-        <rosparam command="load" file="$(find pal_vision_segmentation)/default_tabletop_disparity.yaml" />
+        <rosparam command="load" file="$(find pal_vision_segmentation)/config/default_tabletop_disparity.yaml" />
     </group>
 
     <node pkg="pal_vision_segmentation" type="disparity_segmentation" name="disparity_segmentation">

@@ -115,7 +115,7 @@ void imageCb(const sensor_msgs::ImageConstPtr& msg)
         {
             cv_bridge::CvImage mask_msg;
             mask_msg.header = msg->header;
-            mask_msg.encoding = sensor_msgs::image_encodings::TYPE_8UC1;
+            mask_msg.encoding = sensor_msgs::image_encodings::MONO8;
             mask_msg.image = mask;
             mask_pub.publish(mask_msg.toImageMsg());
         }

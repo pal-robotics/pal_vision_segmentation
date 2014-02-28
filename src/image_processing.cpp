@@ -201,11 +201,20 @@ namespace pal_vision_util
   {
     _img = NULL;
     _img = cvCreateImage(cvSize(10, 10), 8, 3);
+    _releaseOnDestroyer = true;
   }
 
   Image::Image(IplImage *img)
   {
     _img = img;
+    _releaseOnDestroyer = true;
+  }
+
+  Image::Image(const cv::Mat& mat)
+  {
+    _iplFromMat = mat;
+    _img = &_iplFromMat;
+    _releaseOnDestroyer = false;
   }
 
   Image::~Image()
@@ -215,7 +224,7 @@ namespace pal_vision_util
 
   void Image::freeImage()
   {
-    if ( _img != NULL )
+    if ( _img != NULL && _releaseOnDestroyer )
     {
       cvReleaseImage(&_img);
       _img = NULL;
@@ -231,6 +240,7 @@ namespace pal_vision_util
   {
     freeImage();
     _img = img;
+    _releaseOnDestroyer = true;
   }
 
   IplImage* Image::release()

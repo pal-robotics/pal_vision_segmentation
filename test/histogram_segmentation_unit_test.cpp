@@ -1,8 +1,10 @@
 #include <gtest/gtest.h>
 #include <ros/ros.h>
+#include <ros/package.h>
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
+
 
 #include <pal_vision_segmentation/histogram.h>
 
@@ -14,6 +16,10 @@ void backProjectionTest(const std::string& imageFileName,
                         cv::Mat& mask)
 {
   cv::Mat templateImg;
+
+  std::cout << "Trying to read image from file: " << imageFileName << std::endl;
+  std::cout << "Trying to read template from file: " << templateFileName << std::endl;
+
   templateImg = cv::imread(templateFileName, 1);
 
   cv::Mat image;
@@ -46,7 +52,7 @@ void backProjectionTest(const std::string& imageFileName,
   cv::namedWindow("image masked");
   cv::imshow("image masked", imgMasked);
 
-  cv::waitKey(0);
+  cv::waitKey(5000);
 
   bool ok = true;
   EXPECT_TRUE( ok );
@@ -60,8 +66,8 @@ TEST(histogram, test_back_projection)
   //////////////////////////////////////////////////////////////////////////////////////
   // Synthetic example
   //////////////////////////////////////////////////////////////////////////////////////
-  backProjectionTest("pal_test/etc/histogram_segmentation_sample.jpg",
-                     "pal_test/etc/histogram_segmentation_blue_template.jpg",
+  backProjectionTest(ros::package::getPath("pal_vision_segmentation") + "/test/etc/histogram_segmentation_sample.jpg",
+                     ros::package::getPath("pal_vision_segmentation") + "/test/etc/histogram_segmentation_blue_template.jpg",
                      0, 3, 0, 3,
                      mask);
 
@@ -74,8 +80,8 @@ TEST(histogram, test_back_projection)
   //////////////////////////////////////////////////////////////////////////////////////
   // Real example
   //////////////////////////////////////////////////////////////////////////////////////
-  backProjectionTest("pal_test/etc/pringles_frame.jpg",
-                     "etc/pringles1.png",
+  backProjectionTest(ros::package::getPath("pal_vision_segmentation") + "/test/etc/pringles_frame.jpg",
+                     ros::package::getPath("pal_vision_segmentation") + "/test/etc/pringles_template2.png",
                      9, 5, 0, 3,
                      mask);
 

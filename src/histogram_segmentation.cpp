@@ -66,11 +66,38 @@ int dilate_iterations;
 int dilate_size;
 int erode_iterations;
 int erode_size;
+int dark_pixels_threshold;
 cv::Mat image_rect;
 image_transport::Publisher image_pub;
 image_transport::Publisher debug_pub;
 cv::MatND target_hist;
 /***end of callback section***/
+
+
+/**
+ * @brief removeDarkPixels given a BGR image and a binary image computed from it, removes the
+ *        white pixel in the latter corresponding to low luminosity pixels in the former one.
+ * @param[in] originalImg
+ * @param[out] binaryImg
+ * @param[in] threshold
+ */
+void removeDarkPixels(const cv::Mat& originalImg,
+                      cv::Mat& binaryImg,
+                      int threshold = 10)
+{
+  pal_vision_util::Image imgOriginalImg(originalImg), imgL, img_a, img_b;
+
+  pal_vision_util::getLab(imgOriginalImg, imgL, img_a, img_b);
+
+  //update header of cv::Mat L from imgL:
+  cv::Mat L;
+  L = cv::cvarrToMat(imgL.getIplImg());
+
+  cv::Mat L_thresholded;
+  L_thresholded = L.clone();
+  cv::threshold(L, L_thresholded, threshold, 255, cv::THRESH_BINARY);
+  cv::bitwise_and(binaryImg, L_thresholded, binaryImg);
+}
 
 void imageCb(const sensor_msgs::ImageConstPtr& msg)
 {
@@ -93,6 +120,9 @@ void imageCb(const sensor_msgs::ImageConstPtr& msg)
 
         cv::Mat backProject;
         pal_vision_util::backProject(image_rect, target_hist, threshold, backProject);
+
+        if ( dark_pixels_threshold > 0 )
+          removeDarkPixels(image_rect, backProject, dark_pixels_threshold);
 
         cv::Mat mask, tmp1;
 
@@ -120,7 +150,7 @@ void imageCb(const sensor_msgs::ImageConstPtr& msg)
             cv_bridge::CvImage mask_msg;
             mask_msg.header = msg->header;
             mask_msg.header.stamp = now; //ros::Time::now();
-            mask_msg.encoding = sensor_msgs::image_encodings::TYPE_8UC1;
+            mask_msg.encoding = sensor_msgs::image_encodings::MONO8;
             mask_msg.image = mask;
             mask_pub.publish(mask_msg.toImageMsg());
         }
@@ -142,7 +172,7 @@ void imageCb(const sensor_msgs::ImageConstPtr& msg)
         {
             cv_bridge::CvImage debug_msg;
             debug_msg.header = msg->header;
-            debug_msg.encoding = sensor_msgs::image_encodings::TYPE_8UC1;
+            debug_msg.encoding = sensor_msgs::image_encodings::MONO8;
             debug_msg.image = backProject;
             debug_pub.publish(*debug_msg.toImageMsg());
         }
@@ -156,6 +186,7 @@ void reconf_callback(pal_vision_segmentation::HistogramSegmentConfig &config, ui
     dilate_size = config.dilate_size;
     erode_iterations = config.erode_iterations;
     erode_size = config.erode_size;
+    dark_pixels_threshold = config.dark_pixels_threshold;
 }
 
 void computeHistogramFromFile(const std::string& template_path, cv::MatND& hist)
@@ -226,6 +257,7 @@ int main(int argc, char *argv[] )
     nh.param<int>("dilate_size", dilate_size, 7);
     nh.param<int>("erode_iterations", erode_iterations, 0);
     nh.param<int>("erode_size", erode_size, 3);
+    nh.param<int>("dark_pixels_threshold", dark_pixels_threshold, 15);
 
     if(argc < 2)
     {
