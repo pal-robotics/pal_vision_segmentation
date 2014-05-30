@@ -42,22 +42,27 @@
   * in histogram_segmentation.cpp and the corresponding cfg file.
   */
 
-#include <boost/filesystem.hpp>
+// PAL headers
+#include <pal_vision_segmentation/HistogramSegmentConfig.h>
+#include <pal_vision_segmentation/image_processing.h>
+#include <pal_vision_segmentation/histogram.h>
 
+// ROS headers
 #include <ros/ros.h>
+#include <image_transport/image_transport.h>
+#include <cv_bridge/cv_bridge.h>
+#include <sensor_msgs/image_encodings.h>
+#include <dynamic_reconfigure/server.h>
+
+// OpenCV headers
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/video/video.hpp>
 
-#include <image_transport/image_transport.h>
-#include <cv_bridge/cv_bridge.h>
-#include <sensor_msgs/image_encodings.h>
+// Boost headers
+#include <boost/filesystem.hpp>
 
-#include <dynamic_reconfigure/server.h>
-#include <pal_vision_segmentation/HistogramSegmentConfig.h>
-#include <pal_vision_segmentation/image_processing.h>
-#include <pal_vision_segmentation/histogram.h>
 
 /***Variables used in callbacks***/
 image_transport::Publisher mask_pub;

@@ -40,18 +40,21 @@
   * @brief Template matchined based segmentation node
   */
 
-#include <ros/ros.h>
-#include <opencv2/core/core.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
-#include <opencv2/highgui/highgui.hpp>
+// PAL headers
+#include <pal_vision_segmentation/TemplateSegmentConfig.h>
+#include <pal_vision_segmentation/image_processing.h>
 
+// ROS headers
+#include <ros/ros.h>
 #include <image_transport/image_transport.h>
 #include <cv_bridge/cv_bridge.h>
 #include <sensor_msgs/image_encodings.h>
-
 #include <dynamic_reconfigure/server.h>
-#include <pal_vision_segmentation/TemplateSegmentConfig.h>
-#include <pal_vision_segmentation/image_processing.h>
+
+// OpenCV headers
+#include <opencv2/core/core.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/highgui/highgui.hpp>
 
 /***Variables used in callbacks***/
 image_transport::Publisher mask_pub;
