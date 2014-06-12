@@ -101,7 +101,5 @@ TEST(histogram, test_back_projection)
 int main(int argc, char **argv)
 {
     testing::InitGoogleTest(&argc, argv);
-    ros::init(argc, argv, "utest");
-
     return RUN_ALL_TESTS();
 }
