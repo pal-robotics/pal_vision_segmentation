@@ -8,6 +8,7 @@
 
 #include <pal_vision_segmentation/histogram.h>
 
+bool isInteractive;
 
 void backProjectionTest(const std::string& imageFileName,
                         const std::string& templateFileName,
@@ -30,7 +31,8 @@ void backProjectionTest(const std::string& imageFileName,
   cv::normalize(hist, hist, 0, 255, cv::NORM_MINMAX, -1, cv::Mat()); //set histogram bin values in [0, 255]
   cv::threshold(hist, hist, 128, 255, cv::THRESH_BINARY);            //all those bin values > threshold are set to 255, otherwise 0
 
-  pal_vision_util::showHist(hist, false);
+  if ( isInteractive )
+    pal_vision_util::showHist(hist, false);
 
   int threshold = 254;
   pal_vision_util::backProject(image,
@@ -40,19 +42,22 @@ void backProjectionTest(const std::string& imageFileName,
                                dilateIterations, dilateSize, //dilate iterations and size
                                erodeIterations, erodeSize);
 
-  cv::Mat imgMasked;
-  image.copyTo(imgMasked, mask);
+  if ( isInteractive )
+  {
+    cv::Mat imgMasked;
+    image.copyTo(imgMasked, mask);
 
-  cv::namedWindow("image");
-  cv::imshow("image", image);
+    cv::namedWindow("image");
+    cv::imshow("image", image);
 
-  cv::namedWindow("back-projection");
-  cv::imshow("back-projection", mask);
+    cv::namedWindow("back-projection");
+    cv::imshow("back-projection", mask);
 
-  cv::namedWindow("image masked");
-  cv::imshow("image masked", imgMasked);
+    cv::namedWindow("image masked");
+    cv::imshow("image masked", imgMasked);
 
-  cv::waitKey(5000);
+    cv::waitKey(5000);
+  }
 
   bool ok = true;
   EXPECT_TRUE( ok );
@@ -101,5 +106,8 @@ TEST(histogram, test_back_projection)
 int main(int argc, char **argv)
 {
     testing::InitGoogleTest(&argc, argv);
+    
+    isInteractive = argc > 1 && std::string(argv[1]) == "interactive";
+    
     return RUN_ALL_TESTS();
 }
