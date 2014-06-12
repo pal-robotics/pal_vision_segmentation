@@ -131,7 +131,6 @@ void imageCb(const sensor_msgs::ImageConstPtr& msg)
             masked_msg.header = msg->header;
             masked_msg.encoding = sensor_msgs::image_encodings::BGR8;
             masked_msg.image = masked;
-            masked_msg.header.stamp = ros::Time::now();
             image_pub.publish(*masked_msg.toImageMsg());
         }
 

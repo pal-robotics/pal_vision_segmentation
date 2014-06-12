@@ -149,9 +149,8 @@ void disparityCb(const stereo_msgs::DisparityImageConstPtr& msg)
             }
             masked_msg.image = masked;
             // to provide a synchronized output we publish both topics with the same timestamp
-            ros::Time currentTime    = ros::Time::now();
-            masked_msg.header.stamp  = currentTime;
-            camera_info.header.stamp = currentTime;
+            masked_msg.header.stamp  = msg->header.stamp;
+            camera_info.header.stamp = msg->header.stamp;
             cam_pub.publish(*masked_msg.toImageMsg(), camera_info);
         }
 
