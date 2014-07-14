@@ -232,7 +232,7 @@ void computeHistogramFromFile(const std::string& template_path, cv::MatND& hist)
       for (int h = 0; h < hists[0].rows; ++h)
         for (int s = 0; s < hists[0].cols; ++s)
         {
-          int i = 0;
+          unsigned int i = 0;
           bool found = false;
           while ( i < hists.size() && !found )
           {
