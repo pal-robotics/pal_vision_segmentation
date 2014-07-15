@@ -2,8 +2,8 @@
 Changelog for package pal_vision_segmentation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.0.0 (2014-07-15)
+------------------
 * Add depth_segmentation node
 * Do not show images unless explicit argument in unit test
 * Remove ros init from test
