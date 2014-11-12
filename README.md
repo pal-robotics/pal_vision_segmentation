@@ -30,7 +30,7 @@ In order to segment the pringles pot based on its color an image template like t
 Launch the 'histogram_segmentation' node as follows so that the appropriate object template is used:
 
 ```
-rosrun pal_vision_segmentation histogram_segmentation `rospack find pal_vision_segmentation`/etc/pringles_template.png image:=/stereo/  left/image _dilate_iterations:=5 _erode_iterations:=1    
+rosrun pal_vision_segmentation histogram_segmentation `rospack find pal_vision_segmentation`/etc/pringles_template.png image:=/stereo/left/image _dilate_iterations:=5 _erode_iterations:=1    
 ```
 
 #### Visualize the segmentation mask
